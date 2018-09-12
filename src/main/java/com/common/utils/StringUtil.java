@@ -10,8 +10,6 @@ import java.util.regex.Pattern;
 
 import org.springframework.util.StringUtils;
 
-
-
 public class StringUtil {
 	/**
 	 * 去掉字符串两端的空格，NULL时返回"" 

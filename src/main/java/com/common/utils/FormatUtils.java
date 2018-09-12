@@ -6,8 +6,6 @@ import java.util.Locale;
 
 import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
 
-
-
 public class FormatUtils {
     public static Date parseDateTime(String text) {
         try {
