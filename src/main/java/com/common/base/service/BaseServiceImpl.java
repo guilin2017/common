@@ -3,7 +3,7 @@ package com.common.base.service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.common.base.mapper.Mapper;
-import com.common.base.service.Service;
+import com.common.base.service.BaseService;
 
 import tk.mybatis.mapper.entity.Condition;
 
@@ -14,14 +14,15 @@ import java.util.List;
 /**
  * 基于通用MyBatis Mapper插件的Service接口的实现
  */
-public abstract class AbstractService<T> implements Service<T> {
+public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
     @Autowired
     protected Mapper<T> mapper;
 
     private Class<T> modelClass;    // 当前泛型真实类型的Class
 
-    public AbstractService() {
+    
+    public BaseServiceImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         modelClass = (Class<T>) pt.getActualTypeArguments()[0];
     }
