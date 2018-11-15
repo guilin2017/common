@@ -1,115 +1,173 @@
 package com.common.web;
 
-import com.common.model.BaseObject;
+import com.common.model.TimelineInfo;
+import com.github.pagehelper.PageInfo;
 
-public class Result<T>{
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
-	/**
-     * 是否成功
-     */
-    private boolean success;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-    /**
-     * 结果信息编号，对应字典
-     */
-    private String resultCode = "200";
-
-    /**
-     * 返回的消息
-     */
-    private String resultMsg= "调用成功！";
-
-    /**
-     * 返回值，类型为T
-     */
-    private T date;
+@ApiModel(value = "Result", description = "通用返回对象")
+public class Result<T> implements Serializable{
+	
+	private static final long serialVersionUID = -6613595801693213718L;
+	
     
-    public Result() {
-    }
+    @ApiModelProperty(value = "返回状态，true表示正常，false表示不成功")
+    private boolean success = true;
+    /**
+     * the returning code of transaction or operation
+     */
+    @ApiModelProperty(value = "失败错误码")
+    private String resultCode;
+    /**
+     * the returning Message of transaction or operation
+     */
+    @ApiModelProperty(value = "返回状态说明，success为false情况下表示失败原因")
+    private String message;
+    /**
+     * single model
+     */
+    @SuppressWarnings("all")
+    @ApiModelProperty(value = "返回的单个对象")
+    private T model;
+    /**
+     * multi models
+     */
+    @SuppressWarnings("all")
+    @ApiModelProperty(value = "返回的集合对象")
+    private List<T> models;
 
-    public Result(boolean success) {
-        this.success = success;
-    }
+
+    @ApiModelProperty(value = "分页详细信息")
+    private PageInfo<T> pageInfo;
+
+    @ApiModelProperty(value = "timeline参数")
+    private TimelineInfo timelineInfo;
+    /**
+     * extra info
+     */
+    @SuppressWarnings("all")
+    @ApiModelProperty(value = "额外信息", hidden = true)
+    private Object extra;
 
     /**
-     * 是否成功
+     * is valid
+     * add by liuqingkai
      */
+    @ApiModelProperty(value = "业务校验是否成功", hidden = true)
+    private boolean isValid = true;
+
+    /**
+     * validate Messages
+     * add by liuqingkai
+     */
+    @ApiModelProperty(value = "业务校验错误信息", hidden = true)
+    private List<String> validationMessages;
+
+
+    public List<String> getValidationMessages() {
+        return validationMessages;
+    }
+
+
+    public void setValidationMessages(List<String> validationMessages) {
+        this.validationMessages = validationMessages;
+    }
+
+
+    public void setValidationErrorMessages(BindingResult errors) {
+        List<String> errorMessages = new ArrayList<String>();
+        Iterator<FieldError> iter = errors.getFieldErrors().iterator();
+        while (iter.hasNext()) {
+            errorMessages.add(iter.next().getDefaultMessage());
+        }
+        this.setValidationMessages(errorMessages);
+    }
+
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+
+    public void setValid(boolean isValid) {
+        this.isValid = isValid;
+    }
+
     public boolean isSuccess() {
         return success;
     }
 
-    /**
-     * 设置是否成功
-     */
     public void setSuccess(boolean success) {
         this.success = success;
     }
 
-    /**
-     * 结果信息编号，对应字典
-     */
     public String getResultCode() {
         return resultCode;
     }
 
-    /**
-     * 结果信息编号，对应字典
-     */
     public void setResultCode(String resultCode) {
         this.resultCode = resultCode;
     }
 
-    /**
-     * 返回的消息
-     */
-    public String getResultMsg() {
-        return resultMsg;
+    public String getMessage() {
+        return message;
     }
 
-    /**
-     * 返回的消息
-     */
-    public void setResultMsg(String resultMsg) {
-        this.resultMsg = resultMsg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public T getDate() {
-		return date;
-	}
-
-	public void setDate(T date) {
-		this.date = date;
-	}
-
-	@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Result that = (Result) o;
-
-        if (success != that.success) return false;
-        if (resultCode != null ? !resultCode.equals(that.resultCode) : that.resultCode != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
-
-        return true;
+    public T getModel() {
+        return model;
     }
 
-    @Override
-    public int hashCode() {
-        int result = (success ? 1 : 0);
-        result = 31 * result + (resultCode != null ? resultCode.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        return result;
+    public void setModel(T model) {
+        this.model = model;
     }
 
-    @Override
-    public String toString() {
-        return "Result{" +
-                "resultCode='" + resultCode + '\'' +
-                ", success=" + success +
-                ", date=" + date +
-                '}';
+    public List<T> getModels() {
+        if(null != this.models){
+            return models;
+        }else{
+            return new ArrayList<T>();
+        }
+    }
+
+    public void setModels(List<T> models) {
+        this.models = models;
+    }
+
+    public Object getExtra() {
+        return extra;
+    }
+
+    public void setExtra(Object extra) {
+        this.extra = extra;
+    }
+
+
+    public PageInfo<T> getPageInfo() {
+        return pageInfo;
+    }
+
+    public void setPageInfo(PageInfo<T> pageInfo) {
+        this.pageInfo = pageInfo;
+    }
+
+    public TimelineInfo getTimelineInfo() {
+        return timelineInfo;
+    }
+
+    public void setTimelineInfo(TimelineInfo timelineInfo) {
+        this.timelineInfo = timelineInfo;
     }
 }
