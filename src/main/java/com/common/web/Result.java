@@ -19,7 +19,6 @@ public class Result<T> implements Serializable{
 	
 	private static final long serialVersionUID = -6613595801693213718L;
 	
-    
     @ApiModelProperty(value = "返回状态，true表示正常，false表示不成功")
     private boolean success = true;
     /**
